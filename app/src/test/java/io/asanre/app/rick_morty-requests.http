@@ -1,0 +1,19 @@
+
+### get all characters
+GET https://rickandmortyapi.com/api/character
+
+### get character by id
+GET https://rickandmortyapi.com/api/character/1
+
+### get all episodes
+GET https://rickandmortyapi.com/api/episode/
+
+### get episode by id
+GET https://rickandmortyapi.com/api/episode/1
+
+### get all locations
+GET https://rickandmortyapi.com/api/location
+
+### get location by id
+GET https://rickandmortyapi.com/api/location/1
+
