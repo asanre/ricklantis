@@ -67,37 +67,28 @@ fun CharacterEntity.toItem() = CharacterListItem(
 )
 
 @Composable
-fun CharactersScreen(viewmodel: CharacterListViewmodel = koinViewModel()) {
+fun CharactersScreen(
+    viewmodel: CharacterListViewmodel = koinViewModel(),
+    modifier: Modifier = Modifier,
+    showError: () -> Unit = {}
+) {
     LaunchedEffect(viewmodel) { viewmodel.getCharacters() }
     val state by viewmodel.state.collectAsState()
-    val scaffoldState = rememberScaffoldState()
-    val coroutineScope = rememberCoroutineScope()
+    if (state.showError) showError()
 
-
-    val message = stringResource(R.string.generic_error)
-    if (state.showError) LaunchedEffect(scaffoldState) {
-        coroutineScope.launch {
-            scaffoldState.snackbarHostState.showSnackbar(message)
-            viewmodel.onErrorShown()
-        }
-    }
-
-    Scaffold(scaffoldState = scaffoldState) {
-        if (state.showEmptyScreen)
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                OutlinedButton(onClick = { viewmodel.getCharacters() }) {
-                    Text(text = "Retry")
-                }
+    if (state.showEmptyScreen)
+        Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            OutlinedButton(onClick = { viewmodel.getCharacters() }) {
+                Text(text = "Retry")
             }
-        else
-            CharacterListContent(
-                state = state,
-                modifier = Modifier.padding(it),
-                loadMoreCharacters = { viewmodel.getCharacters() },
-                onItemClick = { }
-            )
-    }
-
+        }
+    else
+        CharacterListContent(
+            state = state,
+            modifier = modifier,
+            loadMoreCharacters = { viewmodel.getCharacters() },
+            onItemClick = { }
+        )
 }
 
 @Composable
