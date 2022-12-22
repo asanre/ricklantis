@@ -1,10 +1,9 @@
 package io.asanre.app.data.repository
 
-import io.asanre.app.data.model.CharacterLocation
-import io.asanre.app.data.model.CharacterResult
-import io.asanre.app.data.model.CharactersResponse
+import io.asanre.app.data.model.RequestInfo
 import io.asanre.app.data.service.CharacterApiService
-import io.asanre.app.domain.entities.Status
+import io.asanre.app.fixtures.dummyCharacterResult
+import io.asanre.app.fixtures.dummyCharactersResponse
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -19,22 +18,6 @@ class CharacterRepositoryImplTest {
     private val sut = CharacterRepositoryImpl(apiService)
 
 
-    private val location = CharacterLocation("Moon", "location/1")
-    private val characterResult = CharacterResult(
-        1,
-        "Morty",
-        "NoGen",
-        "image",
-        "alien",
-        Status.Alive,
-        "type",
-        "url",
-        listOf("episode/1"),
-        location,
-        location
-    )
-    private val successCharactersResponse = CharactersResponse(listOf(characterResult))
-
     @ParameterizedTest
     @CsvSource("0, 1", "21, 2")
     fun `given totalAmount then request nextPage`(totalAmount: Int, nextPage: Int) = runTest {
@@ -46,11 +29,26 @@ class CharacterRepositoryImplTest {
 
     @Test
     fun `given a success getCharacters request then return a valid list`() = runTest {
-        coEvery { apiService.getAllCharacters(any()) } returns Result.success(successCharactersResponse)
+        coEvery { apiService.getAllCharacters(any()) } returns Result.success(
+            dummyCharactersResponse
+        )
 
-        val result = sut.getCharacters(0)
-        assertEquals(successCharactersResponse.results.map { it.toEntity() }, result.getOrNull())
+        val result = sut.getCharacters(0).getOrThrow()
+        assertEquals(dummyCharactersResponse.toEntity().characters, result.characters)
+        assertFalse(result.allCharacterLoaded)
     }
+
+    @Test
+    fun `given a success getCharacters request when there are not more characters then notify allCharacterLoaded`() =
+        runTest {
+            coEvery { apiService.getAllCharacters(any()) } returns Result.success(
+                dummyCharactersResponse.copy(info = RequestInfo(null))
+            )
+
+            val result = sut.getCharacters(0).getOrThrow()
+            assertEquals(dummyCharactersResponse.toEntity().characters, result.characters)
+            assertTrue(result.allCharacterLoaded)
+        }
 
     @Test
     fun `given a failure getCharacters request then return an error`() = runTest {
@@ -62,10 +60,10 @@ class CharacterRepositoryImplTest {
 
     @Test
     fun `given a success getCharacterById request then return a valid character`() = runTest {
-        coEvery { apiService.getCharacterById(any()) } returns Result.success(characterResult)
+        coEvery { apiService.getCharacterById(any()) } returns Result.success(dummyCharacterResult)
 
         val result = sut.getCharacterById(1)
-        assertEquals(characterResult.toEntity(), result.getOrNull())
+        assertEquals(dummyCharacterResult.toEntity(), result.getOrNull())
     }
 
     @Test

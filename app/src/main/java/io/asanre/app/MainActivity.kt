@@ -14,58 +14,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.asanre.app.core.ui.theme.RicklantisTheme
+import io.asanre.app.ui.characterList.CharactersScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             RicklantisTheme {
-                CharacterListScreen()
+                CharactersScreen()
             }
         }
-    }
-}
-
-@Composable
-private fun CharacterListScreen() {
-    Card(
-        elevation = 4.dp,
-        modifier = Modifier
-            .padding(20.dp)
-            .clickable { }
-    ) {
-        TestContent()
-    }
-}
-
-@Composable
-private fun TestContent() {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(12.dp),
-    ) {
-        Column {
-            Text(
-                "Rick",
-                color = MaterialTheme.colors.onSurface,
-                style = MaterialTheme.typography.h6
-            )
-            Spacer(modifier = Modifier.size(12.dp))
-            Text(
-                "Human",
-                color = MaterialTheme.colors.onSurface,
-                style = MaterialTheme.typography.body2
-            )
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    RicklantisTheme {
-        CharacterListScreen()
     }
 }
