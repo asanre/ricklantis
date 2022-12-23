@@ -8,15 +8,12 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import io.asanre.app.R
 import io.asanre.app.core.ui.components.LoadingIndicator
 import io.asanre.app.domain.entities.CharacterEntity
 import io.asanre.app.domain.entities.CharacterList
 import io.asanre.app.domain.entities.Location
 import io.asanre.app.domain.entities.Status
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 data class CharacterListState(
@@ -70,25 +67,37 @@ fun CharacterEntity.toItem() = CharacterListItem(
 fun CharactersScreen(
     viewmodel: CharacterListViewmodel = koinViewModel(),
     modifier: Modifier = Modifier,
-    showError: () -> Unit = {}
+    onError: () -> Unit = {},
+    onItemClick: (CharacterListItem) -> Unit,
 ) {
     LaunchedEffect(viewmodel) { viewmodel.getCharacters() }
     val state by viewmodel.state.collectAsState()
-    if (state.showError) showError()
+    if (state.showError) {
+        onError()
+        viewmodel.onErrorShown()
+    }
 
     if (state.showEmptyScreen)
-        Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            OutlinedButton(onClick = { viewmodel.getCharacters() }) {
-                Text(text = "Retry")
-            }
-        }
+        EmptyView(modifier) { viewmodel.getCharacters() }
     else
         CharacterListContent(
             state = state,
             modifier = modifier,
-            loadMoreCharacters = { viewmodel.getCharacters() },
-            onItemClick = { }
+            loadMoreCharacters = viewmodel::getCharacters,
+            onItemClick = onItemClick
         )
+}
+
+@Composable
+private fun EmptyView(
+    modifier: Modifier,
+    onClick: () -> Unit
+) {
+    Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        OutlinedButton(onClick = onClick) {
+            Text(text = "Retry")
+        }
+    }
 }
 
 @Composable

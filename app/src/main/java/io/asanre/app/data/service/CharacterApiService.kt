@@ -7,10 +7,9 @@ import io.asanre.app.data.model.CharactersResponse
 import io.asanre.app.data.model.CharacterResult
 
 interface CharacterApiService {
+    @GET("/api/character/{id}")
+    suspend fun getCharacterById(@Path("id") id: Int): Result<CharacterResult>
 
     @GET("/api/character")
     suspend fun getAllCharacters(@Query("page") page: Int): Result<CharactersResponse>
-
-    @GET("/api/character/{id}")
-    suspend fun getCharacterById(@Path("id") id: Int): Result<CharacterResult>
 }

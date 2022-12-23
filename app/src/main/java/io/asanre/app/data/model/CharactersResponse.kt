@@ -54,6 +54,9 @@ data class CharacterLocation(
     val url: String
 ) {
     fun toLocation(): Location {
-        return Location(name, url)
+        return Location(
+            id = url.extractId(),
+            name = name,
+        )
     }
 }

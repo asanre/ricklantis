@@ -1,4 +1,4 @@
-package io.asanre.app.domain
+package io.asanre.app.domain.repository
 
 import io.asanre.app.domain.entities.CharacterEntity
 import io.asanre.app.domain.entities.CharacterList
