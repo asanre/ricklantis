@@ -4,11 +4,19 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import io.asanre.app.R
 import io.asanre.app.core.ui.components.LoadingIndicator
 import io.asanre.app.domain.entities.CharacterEntity
 import io.asanre.app.domain.entities.CharacterList
@@ -135,21 +143,40 @@ private fun CharacterView(item: CharacterListItem, onItemClick: (CharacterListIt
         modifier = Modifier.clickable { onItemClick(item) }
     ) {
         Row(
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
         ) {
-            Column {
+            AsyncImage(
+                item.imageUrl,
+                contentDescription = null,
+                alignment = Alignment.TopStart,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxWidth(0.33f)
+                    .fillMaxHeight()
+                    .clip(RoundedCornerShape(topStart = 4.dp, bottomStart = 4.dp)),
+                placeholder = painterResource(id = R.drawable.place_holder),
+                error = painterResource(id = R.drawable.error_place_holder)
+            )
+            Column(modifier = Modifier.padding(10.dp)) {
+                Text(item.name, style = MaterialTheme.typography.subtitle1)
                 Text(
-                    item.name,
-                    style = MaterialTheme.typography.h6
+                    text = "${item.status} - ${item.species}",
+                    style = MaterialTheme.typography.caption
                 )
                 Spacer(modifier = Modifier.size(12.dp))
                 Text(
-                    item.species,
-                    style = MaterialTheme.typography.body2
+                    stringResource(R.string.last_location_title),
+                    color = LocalContentColor.current.copy(alpha = 0.8f),
+                    style = MaterialTheme.typography.caption
                 )
+                Text(
+                    item.lastLocation.name,
+                    style = MaterialTheme.typography.body2,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1
+                )
+
             }
         }
     }

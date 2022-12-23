@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Ricklantis</string>
     <string name="generic_error">Upsss there is an error</string>
+    <string name="last_location_title">Last known location:</string>
 </resources>

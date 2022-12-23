@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
                 val coroutineScope = rememberCoroutineScope()
 
                 val modalState = rememberModalSheetState(mode = SheetMode.FULL_HEIGHT)
-                var selectedCharacter by remember { mutableStateOf(0) }
+                var selectedCharacter by remember { mutableStateOf<Int?>(null) }
 
                 fun showError(message: String) {
                     coroutineScope.launch {
@@ -39,13 +39,15 @@ class MainActivity : ComponentActivity() {
                 Scaffold(scaffoldState = scaffoldState) {
                     ModalBottomSheetContainer(modal = {
                         ModalBottomSheet(state = modalState, sheetContent = {
-                            CharacterDetailScreen(
-                                characterId = selectedCharacter,
-                                onError = {
-                                    modalState.hide()
-                                    showError(errorMessage)
-                                },
-                            )
+                            selectedCharacter?.let { characterId ->
+                                CharacterDetailScreen(
+                                    characterId = characterId,
+                                    onError = {
+                                        modalState.hide()
+                                        showError(errorMessage)
+                                    },
+                                )
+                            }
                         })
                     }) {
                         CharactersScreen(modifier = Modifier.padding(it),
