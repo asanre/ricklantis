@@ -20,6 +20,9 @@ val dummyCharacterResult = CharacterResult(
     location,
     location
 )
+
+val dummyCharacter = dummyCharacterResult.toEntity()
+
 val dummyCharactersResponse = CharactersResponse(
     listOf(dummyCharacterResult),
     RequestInfo("next/2")
