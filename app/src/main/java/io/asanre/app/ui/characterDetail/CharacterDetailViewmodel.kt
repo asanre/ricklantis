@@ -2,6 +2,7 @@ package io.asanre.app.ui.characterDetail
 
 import androidx.lifecycle.ViewModel
 import io.asanre.app.core.ui.launch
+import io.asanre.app.domain.entities.CharacterDetails
 import io.asanre.app.domain.usecase.GetCharacterDetailsUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,12 +16,13 @@ class CharacterDetailViewmodel(
     val state: StateFlow<CharacterDetailState> = _state
 
     fun getDetail(id: Int) = launch {
+        _state.update { CharacterDetailState.INITIAL }
         getCharacterDetails(id).onSuccess { detail ->
-            _state.update { it.copy(value = detail) }
+            _state.update { it.displayDetail(detail) }
         }.onFailure {
-            _state.update { it.copy(showError = true) }
+            _state.update { it.onError() }
         }
     }
 
-    fun onErrorShown() = _state.update { it.copy(showError = false) }
+    fun onErrorShown() = _state.update { it.dismissError() }
 }

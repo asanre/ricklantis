@@ -26,7 +26,7 @@ import org.koin.androidx.compose.koinViewModel
 
 data class CharacterListState(
     val characters: List<CharacterListItem>,
-    val showError: Boolean,
+    val error: Boolean,
     private val hideLoading: Boolean,
     private val hasAllCharacters: Boolean,
 ) {
@@ -40,13 +40,13 @@ data class CharacterListState(
         hasAllCharacters = characterList.allCharacterLoaded
     )
 
-    fun showError() = copy(showError = true, hideLoading = true)
-    fun dismissError() = copy(showError = false)
+    fun showError() = copy(error = true, hideLoading = true)
+    fun dismissError() = copy(error = false)
 
     companion object {
         val INITIAL = CharacterListState(
             characters = emptyList(),
-            showError = false,
+            error = false,
             hasAllCharacters = false,
             hideLoading = false
         )
@@ -80,7 +80,7 @@ fun CharactersScreen(
 ) {
     LaunchedEffect(viewmodel) { viewmodel.getCharacters() }
     val state by viewmodel.state.collectAsState()
-    if (state.showError) {
+    if (state.error) {
         onError()
         viewmodel.onErrorShown()
     }
@@ -150,10 +150,10 @@ private fun CharacterView(item: CharacterListItem, onItemClick: (CharacterListIt
                 item.imageUrl,
                 contentDescription = null,
                 alignment = Alignment.TopStart,
-                contentScale = ContentScale.Crop,
+                contentScale = ContentScale.FillHeight,
                 modifier = Modifier
-                    .fillMaxWidth(0.33f)
                     .fillMaxHeight()
+                    .fillMaxWidth(0.33f)
                     .clip(RoundedCornerShape(topStart = 4.dp, bottomStart = 4.dp)),
                 placeholder = painterResource(id = R.drawable.place_holder),
                 error = painterResource(id = R.drawable.error_place_holder)

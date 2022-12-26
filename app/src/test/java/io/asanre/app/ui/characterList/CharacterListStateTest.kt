@@ -43,7 +43,7 @@ class CharacterListStateTest {
     fun `given initial state when invoke showError then show error and hide loading`() {
         val sut = CharacterListState.INITIAL.showError()
 
-        assertTrue(sut.showError)
+        assertTrue(sut.error)
         assertFalse(sut.showLoading)
     }
 
@@ -51,6 +51,6 @@ class CharacterListStateTest {
     fun `given a state with error when dismissError then hide error`() {
         val sut = CharacterListState.INITIAL.showError()
 
-        assertFalse(sut.dismissError().showError)
+        assertFalse(sut.dismissError().error)
     }
 }

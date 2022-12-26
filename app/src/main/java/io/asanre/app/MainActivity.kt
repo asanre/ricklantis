@@ -42,9 +42,11 @@ class MainActivity : ComponentActivity() {
                             selectedCharacter?.let { characterId ->
                                 CharacterDetailScreen(
                                     characterId = characterId,
+                                    onCloseClick = { modalState.hide() },
                                     onError = {
                                         modalState.hide()
                                         showError(errorMessage)
+                                        selectedCharacter = null
                                     },
                                 )
                             }
