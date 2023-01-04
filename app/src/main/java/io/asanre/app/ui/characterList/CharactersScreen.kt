@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import io.asanre.app.R
 import io.asanre.app.core.ui.components.LoadingIndicator
-import io.asanre.app.domain.entities.CharacterEntity
+import io.asanre.app.domain.entities.Character
 import io.asanre.app.domain.entities.CharacterList
 import io.asanre.app.domain.entities.Location
 import io.asanre.app.domain.entities.Status
@@ -62,7 +62,7 @@ data class CharacterListItem(
     val lastLocation: Location
 )
 
-fun CharacterEntity.toItem() = CharacterListItem(
+fun Character.toItem() = CharacterListItem(
     id = id,
     name = name,
     imageUrl = imageUrl,

@@ -1,7 +1,7 @@
 package io.asanre.app.domain.usecase
 
 import io.asanre.app.domain.entities.CharacterDetails
-import io.asanre.app.domain.entities.CharacterEntity
+import io.asanre.app.domain.entities.Character
 import io.asanre.app.domain.repository.CharacterRepository
 import io.asanre.app.domain.repository.EpisodeRepository
 import io.asanre.app.domain.repository.LocationRepository
@@ -21,7 +21,7 @@ internal class GetCharacterDetailsUseCaseTest {
 
     @Test
     fun `given get character when error then return result failure`() = runTest {
-        val expected = Result.failure<CharacterEntity>(Error("Error"))
+        val expected = Result.failure<Character>(Error("Error"))
         coEvery { characterRepo.getCharacterById(any()) } returns expected
 
         val result = sut(1)

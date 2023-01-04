@@ -1,7 +1,7 @@
 package io.asanre.app.data.model
 
 import com.google.gson.annotations.SerializedName
-import io.asanre.app.domain.entities.CharacterEntity
+import io.asanre.app.domain.entities.Character
 import io.asanre.app.domain.entities.CharacterList
 import io.asanre.app.domain.entities.Location
 import io.asanre.app.domain.entities.Status
@@ -35,7 +35,7 @@ data class CharacterResult(
     val origin: CharacterLocation,
 ) {
     fun toEntity() =
-        CharacterEntity(
+        Character(
             id = id,
             name = name,
             imageUrl = image,

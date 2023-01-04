@@ -2,7 +2,7 @@ package io.asanre.app.data.repository
 
 import io.asanre.app.data.service.CharacterApiService
 import io.asanre.app.domain.repository.CharacterRepository
-import io.asanre.app.domain.entities.CharacterEntity
+import io.asanre.app.domain.entities.Character
 import io.asanre.app.domain.entities.CharacterList
 import kotlinx.coroutines.delay
 
@@ -16,7 +16,7 @@ class CharacterRepositoryImpl(
             .mapCatching { response -> response.toEntity() }
     }
 
-    override suspend fun getCharacterById(id: Int): Result<CharacterEntity> {
+    override suspend fun getCharacterById(id: Int): Result<Character> {
         return api.getCharacterById(id).mapCatching { it.toEntity() }
     }
 

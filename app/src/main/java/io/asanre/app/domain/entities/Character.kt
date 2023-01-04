@@ -3,11 +3,11 @@ package io.asanre.app.domain.entities
 import com.google.gson.annotations.SerializedName
 
 data class CharacterList(
-    val characters: List<CharacterEntity>,
+    val characters: List<Character>,
     val allCharacterLoaded: Boolean
 )
 
-data class CharacterEntity(
+data class Character(
     val id: Int,
     val name: String,
     val imageUrl: String,
@@ -33,7 +33,7 @@ data class CharacterDetails(
     val firstEpisode: Episode?,
 ) {
     constructor(
-        character: CharacterEntity,
+        character: Character,
         firstEpisode: Episode?,
         origin: LocationExtended?,
         lastLocation: LocationExtended?,
