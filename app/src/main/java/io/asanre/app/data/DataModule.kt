@@ -10,16 +10,14 @@ import io.asanre.app.domain.repository.CharacterRepository
 import io.asanre.app.domain.repository.EpisodeRepository
 import io.asanre.app.domain.repository.LocationRepository
 import org.koin.dsl.module
-import retrofit2.Retrofit
-import retrofit2.create
 
 val dataModule = module {
     single { CharacterApiService(get()) }
     single<CharacterRepository> { CharacterRepositoryImpl(get()) }
 
-    single { get<Retrofit>().create<EpisodeApiService>() }
+    single { EpisodeApiService(get()) }
     single<EpisodeRepository> { EpisodeRepositoryImpl(get()) }
 
-    single { get<Retrofit>().create<LocationApiService>() }
+    single { LocationApiService(get()) }
     single<LocationRepository> { LocationRepositoryImpl(get()) }
 }
