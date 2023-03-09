@@ -11,7 +11,7 @@ interested classes.
 Projects External dependencies.
 
 - **Compose-ui:** UI toolkit
-- **Retrofit:** network request
+- **Ktor-client:** network request
 - **Koin:** dependency injection
 - **Coil:** image loading
 - **Junit5:** testing framework
@@ -22,5 +22,4 @@ Projects External dependencies.
 - Navigation (the character detail is shown in a modal could be improve using compose navigator or
   the desire library)
 - UI testing
-- Refactor of cache in Location and Episode repository
 - Pagination
