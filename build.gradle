@@ -9,10 +9,6 @@ buildscript {
 
         ktor_version = "2.2.4"
 
-        retrofit_version = "2.9.0"
-        retrofit_result_version = "1.0.5"
-        logging_interceptor_version = "4.10.0"
-
         mockk_version = "1.13.3"
         junit5_version = "5.8.2"
         coroutines_test_version = "1.6.4"

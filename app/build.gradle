@@ -70,12 +70,6 @@ dependencies {
     implementation "io.insert-koin:koin-android:$koin_android_version"
     implementation "io.insert-koin:koin-androidx-compose:$koin_android_compose_version"
 
-    // Retrofit
-    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
-    implementation "com.github.skydoves:retrofit-adapters-result:$retrofit_result_version"
-    implementation "com.squareup.okhttp3:logging-interceptor:$logging_interceptor_version"
-
     // Ktor
     implementation "io.ktor:ktor-client-core:$ktor_version"
     implementation "io.ktor:ktor-client-okhttp:$ktor_version"
