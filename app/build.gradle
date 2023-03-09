@@ -75,6 +75,12 @@ dependencies {
     implementation "com.github.skydoves:retrofit-adapters-result:$retrofit_result_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$logging_interceptor_version"
 
+    // Ktor
+    implementation "io.ktor:ktor-client-core:$ktor_version"
+    implementation "io.ktor:ktor-client-okhttp:$ktor_version"
+    implementation "io.ktor:ktor-client-content-negotiation:$ktor_version"
+    implementation "io.ktor:ktor-serialization-gson:$ktor_version"
+    implementation "io.ktor:ktor-client-logging:$ktor_version"
 
     // Test
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junit5_version"

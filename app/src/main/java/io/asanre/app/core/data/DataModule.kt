@@ -1,6 +1,12 @@
 package io.asanre.app.core.data
 
 import com.skydoves.retrofit.adapters.result.ResultCallAdapterFactory
+import io.ktor.client.*
+import io.ktor.client.engine.okhttp.*
+import io.ktor.client.plugins.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.logging.*
+import io.ktor.serialization.gson.*
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
@@ -11,11 +17,13 @@ private const val BASE_URL = "https://rickandmortyapi.com/"
 
 val coreDataModule = module {
     single {
-        val client = OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().apply {
-            setLevel(
-                HttpLoggingInterceptor.Level.BODY
-            )
-        }).build()
+        val client = OkHttpClient.Builder()
+            .addInterceptor(HttpLoggingInterceptor()
+                .apply {
+                    setLevel(
+                        HttpLoggingInterceptor.Level.BODY
+                    )
+                }).build()
 
         Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -23,5 +31,21 @@ val coreDataModule = module {
             .addCallAdapterFactory(ResultCallAdapterFactory.create())
             .client(client)
             .build()
+    }
+
+    single {
+        HttpClient(OkHttp) {
+            defaultRequest {
+                url(BASE_URL)
+            }
+
+            install(Logging) {
+                level = LogLevel.BODY
+            }
+
+            install(ContentNegotiation) {
+                gson()
+            }
+        }
     }
 }

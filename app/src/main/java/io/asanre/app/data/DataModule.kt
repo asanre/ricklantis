@@ -14,7 +14,7 @@ import retrofit2.Retrofit
 import retrofit2.create
 
 val dataModule = module {
-    single { get<Retrofit>().create<CharacterApiService>() }
+    single { CharacterApiService(get()) }
     single<CharacterRepository> { CharacterRepositoryImpl(get()) }
 
     single { get<Retrofit>().create<EpisodeApiService>() }

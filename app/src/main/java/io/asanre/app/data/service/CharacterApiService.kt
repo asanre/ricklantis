@@ -1,15 +1,25 @@
 package io.asanre.app.data.service
 
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
-import io.asanre.app.data.model.CharactersResponse
 import io.asanre.app.data.model.CharacterResult
+import io.asanre.app.data.model.CharactersResponse
+import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.request.*
 
-interface CharacterApiService {
-    @GET("/api/character/{id}")
-    suspend fun getCharacterById(@Path("id") id: Int): Result<CharacterResult>
+class CharacterApiService(
+    private val client: HttpClient
+) {
+    suspend fun getCharacterById(id: Int): Result<CharacterResult> {
+        return runCatching {
+            val response = client.get("api/character/$id")
+            response.body()
+        }
+    }
 
-    @GET("/api/character")
-    suspend fun getAllCharacters(@Query("page") page: Int): Result<CharactersResponse>
+    suspend fun getAllCharacters(page: Int): Result<CharactersResponse> {
+        return runCatching {
+            val response = client.get("api/character?page=$page")
+            response.body()
+        }
+    }
 }
