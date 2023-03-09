@@ -1,5 +1,6 @@
 package io.asanre.app.data.service
 
+import io.asanre.app.core.data.getBody
 import io.asanre.app.domain.entities.Episode
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -10,7 +11,7 @@ import io.ktor.resources.*
 class EpisodeApiService(private val client: HttpClient) {
 
     suspend fun getEpisode(id: Int): Result<Episode> = runCatching {
-        client.get(Episodes.Id(id)).body()
+        client.getBody(Episodes.Id(id))
     }
 
     @Resource("/episode")

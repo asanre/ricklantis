@@ -1,5 +1,6 @@
 package io.asanre.app.data.service
 
+import io.asanre.app.core.data.getBody
 import io.asanre.app.domain.entities.LocationExtended
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -9,7 +10,7 @@ import io.ktor.resources.*
 
 class LocationApiService(private val client: HttpClient) {
     suspend fun getLocation(id: Int): Result<LocationExtended> = runCatching {
-        client.get(Locations.Id(id)).body()
+        client.getBody(Locations.Id(id))
     }
 
     @Resource("/location")
