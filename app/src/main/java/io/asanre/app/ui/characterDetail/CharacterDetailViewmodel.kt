@@ -2,7 +2,6 @@ package io.asanre.app.ui.characterDetail
 
 import androidx.lifecycle.ViewModel
 import io.asanre.app.core.ui.launch
-import io.asanre.app.domain.entities.CharacterDetails
 import io.asanre.app.domain.usecase.GetCharacterDetailsUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

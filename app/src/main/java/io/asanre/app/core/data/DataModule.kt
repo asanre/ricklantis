@@ -15,6 +15,7 @@ private const val BASE_URL = "https://rickandmortyapi.com/api/"
 val coreDataModule = module {
     single {
         HttpClient(OkHttp) {
+            expectSuccess = true
             engine {
                 addInterceptor(HttpLoggingInterceptor().apply {
                     setLevel(
