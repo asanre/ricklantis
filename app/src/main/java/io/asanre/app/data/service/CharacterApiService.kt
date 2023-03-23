@@ -1,6 +1,6 @@
 package io.asanre.app.data.service
 
-import io.asanre.app.core.data.getBody
+import io.asanre.app.core.data.getResult
 import io.asanre.app.data.model.CharacterResult
 import io.asanre.app.data.model.CharactersResponse
 import io.ktor.client.*
@@ -11,17 +11,11 @@ import io.ktor.client.statement.*
 import io.ktor.resources.*
 
 class CharacterApiService(private val client: HttpClient) {
-    suspend fun getCharacterById(id: Int): Result<CharacterResult> {
-        return runCatching {
-            client.getBody(Characters.ById(id))
-        }
-    }
+    suspend fun getAllCharacters(page: Int): Result<CharactersResponse> =
+        client.getResult(Characters(page))
 
-    suspend fun getAllCharacters(page: Int): Result<CharactersResponse> {
-        return runCatching {
-            client.getBody(Characters(page))
-        }
-    }
+    suspend fun getCharacterById(id: Int): Result<CharacterResult> =
+        client.getResult(Characters.ById(id))
 
     @Resource("/character")
     private class Characters(val page: Int? = null) {
