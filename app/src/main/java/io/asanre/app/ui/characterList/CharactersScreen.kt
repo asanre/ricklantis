@@ -39,6 +39,8 @@ import io.asanre.app.domain.entities.Character
 import io.asanre.app.domain.entities.CharacterList
 import io.asanre.app.domain.entities.Location
 import io.asanre.app.domain.entities.Status
+import io.asanre.app.ui.characterList.CharactersEvent.ErrorShown
+import io.asanre.app.ui.characterList.CharactersEvent.GetCharacters
 import org.koin.androidx.compose.koinViewModel
 
 data class CharacterListState(
@@ -70,6 +72,11 @@ data class CharacterListState(
     }
 }
 
+sealed class CharactersEvent {
+    object ErrorShown : CharactersEvent()
+    object GetCharacters : CharactersEvent()
+}
+
 data class CharacterListItem(
     val id: Int,
     val name: String,
@@ -95,25 +102,26 @@ fun CharactersScreen(
     onError: () -> Unit = {},
     onItemClick: (CharacterListItem) -> Unit,
 ) {
-    LaunchedEffect(Unit) { viewmodel.getCharacters() }
+    LaunchedEffect(Unit) { viewmodel.onEvent(GetCharacters) }
     val state by viewmodel.state.collectAsState()
     if (state.error) {
         onError()
-        viewmodel.onErrorShown()
+        viewmodel.onEvent(ErrorShown)
     }
 
-    if (state.showEmptyScreen)
+    if (state.showEmptyScreen) {
         EmptyView(
             modifier = modifier,
-            onClick = viewmodel::getCharacters
+            onClick = { viewmodel.onEvent(GetCharacters) }
         )
-    else
+    } else {
         CharacterListContent(
             state = state,
             modifier = modifier,
-            loadMoreCharacters = viewmodel::getCharacters,
+            loadMoreCharacters = { viewmodel.onEvent(GetCharacters) },
             onItemClick = onItemClick
         )
+    }
 }
 
 @Composable
