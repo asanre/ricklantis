@@ -4,13 +4,17 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.ModalBottomSheetValue.*
+import androidx.compose.material.ModalBottomSheetValue.Expanded
+import androidx.compose.material.ModalBottomSheetValue.HalfExpanded
+import androidx.compose.material.ModalBottomSheetValue.Hidden
 import androidx.compose.material.SwipeableDefaults
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import io.asanre.app.core.ui.components.modal.SheetMode.*
+import io.asanre.app.core.ui.components.modal.SheetMode.DYNAMIC
+import io.asanre.app.core.ui.components.modal.SheetMode.EXPANDABLE
+import io.asanre.app.core.ui.components.modal.SheetMode.FULL_HEIGHT
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -87,8 +91,7 @@ class ModalSheetState constructor(
         get() = layoutState.currentValue.isExpanded
 
     private val isFullyExpanded: Boolean
-        get() = isVisible && (
-            (layoutState.targetValue.isExpanded && layoutState.progress.fraction > START_FLAT_CORNER_POINT))
+        get() = isVisible && isExpanded
 
     internal val showHeader: Boolean
         get() = when (mode) {

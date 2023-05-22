@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'org.jetbrains.kotlin.plugin.serialization'
     id "de.mannodermaus.android-junit5" version "1.8.2.1"
+    id 'app.cash.molecule'
 }
 
 def keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -48,9 +49,9 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
         freeCompilerArgs = freeCompilerArgs + [
-                "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-                "-opt-in=androidx.compose.animation.ExperimentalAnimationApi",
-                "-opt-in=androidx.compose.material.ExperimentalMaterialApi",
+                "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                "-Xopt-in=androidx.compose.animation.ExperimentalAnimationApi",
+                "-Xopt-in=androidx.compose.material.ExperimentalMaterialApi",
         ]
     }
     buildFeatures {
