@@ -39,43 +39,44 @@ import io.asanre.app.domain.entities.Character
 import io.asanre.app.domain.entities.CharacterList
 import io.asanre.app.domain.entities.Location
 import io.asanre.app.domain.entities.Status
-import io.asanre.app.ui.characterList.CharactersEvent.ErrorShown
-import io.asanre.app.ui.characterList.CharactersEvent.GetCharacters
+import io.asanre.app.ui.characterList.CharactersScreen.Event
 import org.koin.androidx.compose.koinViewModel
 
-data class CharacterListState(
-    val characters: List<CharacterListItem>,
-    val error: Boolean,
-    private val loading: Boolean,
-    private val hasAllCharacters: Boolean,
-) {
-    val showLoading: Boolean = loading && !hasAllCharacters
-    val count = characters.size.takeUnless { hasAllCharacters }
-    val showEmptyScreen: Boolean = !showLoading && characters.isEmpty()
+object CharactersScreen {
+    data class State(
+        val characters: List<CharacterListItem>,
+        val error: Boolean,
+        private val loading: Boolean,
+        private val hasAllCharacters: Boolean,
+    ) {
+        val showLoading: Boolean = loading && !hasAllCharacters
+        val count = characters.size.takeUnless { hasAllCharacters }
+        val showEmptyScreen: Boolean = !showLoading && characters.isEmpty()
 
-    fun addCharacters(characterList: CharacterList) = copy(
-        characters = characters + characterList.characters.map { it.toItem() },
-        loading = false,
-        hasAllCharacters = characterList.allCharacterLoaded
-    )
-
-    fun showError() = copy(error = true, loading = false)
-    fun dismissError() = copy(error = false)
-    fun showLoading() = copy(loading = true)
-
-    companion object {
-        val INITIAL = CharacterListState(
-            characters = emptyList(),
-            error = false,
-            hasAllCharacters = false,
-            loading = true
+        fun addCharacters(characterList: CharacterList) = copy(
+            characters = characters + characterList.characters.map { it.toItem() },
+            loading = false,
+            hasAllCharacters = characterList.allCharacterLoaded
         )
-    }
-}
 
-sealed class CharactersEvent {
-    object ErrorShown : CharactersEvent()
-    object GetCharacters : CharactersEvent()
+        fun showError() = copy(error = true, loading = false)
+        fun dismissError() = copy(error = false)
+        fun showLoading() = copy(loading = true)
+
+        companion object {
+            val INITIAL = State(
+                characters = emptyList(),
+                error = false,
+                hasAllCharacters = false,
+                loading = true
+            )
+        }
+    }
+
+    sealed class Event {
+        object ErrorShown : Event()
+        object GetCharacters : Event()
+    }
 }
 
 data class CharacterListItem(
@@ -103,23 +104,23 @@ fun CharactersScreen(
     onError: () -> Unit = {},
     onItemClick: (CharacterListItem) -> Unit,
 ) {
-    LaunchedEffect(Unit) { viewmodel.emit(GetCharacters) }
+    LaunchedEffect(Unit) { viewmodel.emit(Event.GetCharacters) }
     val state by viewmodel.state.collectAsState()
     if (state.error) {
         onError()
-        viewmodel.emit(ErrorShown)
+        viewmodel.emit(Event.ErrorShown)
     }
 
     if (state.showEmptyScreen) {
         EmptyView(
             modifier = modifier,
-            onClick = { viewmodel.emit(GetCharacters) }
+            onClick = { viewmodel.emit(Event.GetCharacters) }
         )
     } else {
         CharacterListContent(
             state = state,
             modifier = modifier,
-            loadMoreCharacters = { viewmodel.emit(GetCharacters) },
+            loadMoreCharacters = { viewmodel.emit(Event.GetCharacters) },
             onItemClick = onItemClick
         )
     }
@@ -139,7 +140,7 @@ private fun EmptyView(
 
 @Composable
 private fun CharacterListContent(
-    state: CharacterListState,
+    state: CharactersScreen.State,
     modifier: Modifier = Modifier,
     loadMoreCharacters: () -> Unit,
     onItemClick: (CharacterListItem) -> Unit,

@@ -4,6 +4,8 @@ import app.cash.molecule.RecompositionClock
 import app.cash.turbine.test
 import io.asanre.app.domain.repository.CharacterRepository
 import io.asanre.app.fixtures.dummyCharacterList
+import io.asanre.app.ui.characterList.CharactersScreen.Event
+import io.asanre.app.ui.characterList.CharactersScreen.State
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -26,7 +28,7 @@ class CharacterListViewmodelTest {
     fun `when collect  first state should be initial state`() = runTest {
         viewModel.state.test {
             val state = awaitItem()
-            assertEquals(CharacterListState.INITIAL, state)
+            assertEquals(State.INITIAL, state)
         }
     }
 
@@ -34,7 +36,7 @@ class CharacterListViewmodelTest {
     fun `when GetCharacters should get characters from api`() = runTest {
         coEvery { repository.getCharacters(any()) } returns Result.success(dummyCharacterList)
         viewModel.state.test {
-            viewModel.emit(CharactersEvent.GetCharacters)
+            viewModel.emit(Event.GetCharacters)
             cancelAndIgnoreRemainingEvents()
             coVerify(exactly = 1) { repository.getCharacters(any()) }
         }
@@ -45,7 +47,7 @@ class CharacterListViewmodelTest {
         val result = dummyCharacterList
         coEvery { repository.getCharacters(any()) } returns Result.success(result)
         viewModel.state.test {
-            viewModel.emit(CharactersEvent.GetCharacters)
+            viewModel.emit(Event.GetCharacters)
             assertEquals(awaitItem().addCharacters(result), awaitItem())
         }
     }
@@ -55,7 +57,7 @@ class CharacterListViewmodelTest {
         coEvery { repository.getCharacters(any()) } returns Result.failure(Error())
         viewModel.state.test {
             val initial = awaitItem()
-            viewModel.emit(CharactersEvent.GetCharacters)
+            viewModel.emit(Event.GetCharacters)
             assertEquals(initial.showError(), awaitItem())
         }
     }
@@ -64,8 +66,8 @@ class CharacterListViewmodelTest {
     fun `when ErrorShown should dismissError`() = runTest {
         coEvery { repository.getCharacters(any()) } returns Result.failure(Error())
         viewModel.state.test {
-            viewModel.emit(CharactersEvent.GetCharacters)
-            viewModel.emit(CharactersEvent.ErrorShown)
+            viewModel.emit(Event.GetCharacters)
+            viewModel.emit(Event.ErrorShown)
             skipItems(1)
             assertEquals(awaitItem().dismissError(), awaitItem())
         }

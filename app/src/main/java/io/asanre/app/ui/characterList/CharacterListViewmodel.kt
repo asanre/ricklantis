@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import app.cash.molecule.RecompositionClock
 import app.cash.molecule.launchMolecule
 import io.asanre.app.domain.repository.CharacterRepository
+import io.asanre.app.ui.characterList.CharactersScreen.Event
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,16 +22,16 @@ class CharacterListViewmodel(
     private val recompositionClock: RecompositionClock,
 ) : ViewModel() {
     private val scope = CoroutineScope(viewModelScope.coroutineContext + coroutineContext)
-    private val events = MutableSharedFlow<CharactersEvent>(extraBufferCapacity = 20)
+    private val events = MutableSharedFlow<Event>(extraBufferCapacity = 20)
 
-    val state: StateFlow<CharacterListState> by lazy(LazyThreadSafetyMode.NONE) {
+    val state: StateFlow<CharactersScreen.State> by lazy(LazyThreadSafetyMode.NONE) {
         scope.launchMolecule(recompositionClock) {
-            var state by remember { mutableStateOf(CharacterListState.INITIAL) }
+            var state by remember { mutableStateOf(CharactersScreen.State.INITIAL) }
 
             LaunchedEffect(Unit) {
                 events.collect { event ->
                     when (event) {
-                        CharactersEvent.GetCharacters -> {
+                        Event.GetCharacters -> {
                             state.count?.also { count ->
                                 state = state.showLoading()
                                 repository.getCharacters(count)
@@ -39,7 +40,7 @@ class CharacterListViewmodel(
                             }
                         }
 
-                        CharactersEvent.ErrorShown -> state = state.dismissError()
+                        Event.ErrorShown -> state = state.dismissError()
                     }
                 }
             }
@@ -47,7 +48,7 @@ class CharacterListViewmodel(
         }
     }
 
-    fun emit(event: CharactersEvent) {
+    fun emit(event: Event) {
         if (!events.tryEmit(event)) {
             error("Event buffer overflow.")
         }
