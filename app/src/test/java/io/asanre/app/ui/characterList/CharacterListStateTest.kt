@@ -53,4 +53,11 @@ class CharacterListStateTest {
 
         assertFalse(sut.dismissError().error)
     }
+
+    @Test
+    fun `when showLoading() loading should be true`() {
+        val sut = CharacterListState.INITIAL.copy(loading = false)
+
+        assertTrue(sut.showLoading().showLoading)
+    }
 }

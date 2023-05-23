@@ -61,6 +61,7 @@ data class CharacterListState(
 
     fun showError() = copy(error = true, loading = false)
     fun dismissError() = copy(error = false)
+    fun showLoading() = copy(loading = true)
 
     companion object {
         val INITIAL = CharacterListState(
@@ -102,23 +103,23 @@ fun CharactersScreen(
     onError: () -> Unit = {},
     onItemClick: (CharacterListItem) -> Unit,
 ) {
-    LaunchedEffect(Unit) { viewmodel.onEvent(GetCharacters) }
+    LaunchedEffect(Unit) { viewmodel.emit(GetCharacters) }
     val state by viewmodel.state.collectAsState()
     if (state.error) {
         onError()
-        viewmodel.onEvent(ErrorShown)
+        viewmodel.emit(ErrorShown)
     }
 
     if (state.showEmptyScreen) {
         EmptyView(
             modifier = modifier,
-            onClick = { viewmodel.onEvent(GetCharacters) }
+            onClick = { viewmodel.emit(GetCharacters) }
         )
     } else {
         CharacterListContent(
             state = state,
             modifier = modifier,
-            loadMoreCharacters = { viewmodel.onEvent(GetCharacters) },
+            loadMoreCharacters = { viewmodel.emit(GetCharacters) },
             onItemClick = onItemClick
         )
     }
