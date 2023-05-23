@@ -46,20 +46,20 @@ import org.koin.androidx.compose.koinViewModel
 data class CharacterListState(
     val characters: List<CharacterListItem>,
     val error: Boolean,
-    private val hideLoading: Boolean,
+    private val loading: Boolean,
     private val hasAllCharacters: Boolean,
 ) {
-    val showLoading: Boolean = !(hideLoading || hasAllCharacters)
+    val showLoading: Boolean = loading && !hasAllCharacters
     val count = characters.size.takeUnless { hasAllCharacters }
     val showEmptyScreen: Boolean = !showLoading && characters.isEmpty()
 
     fun addCharacters(characterList: CharacterList) = copy(
         characters = characters + characterList.characters.map { it.toItem() },
-        hideLoading = false,
+        loading = false,
         hasAllCharacters = characterList.allCharacterLoaded
     )
 
-    fun showError() = copy(error = true, hideLoading = true)
+    fun showError() = copy(error = true, loading = false)
     fun dismissError() = copy(error = false)
 
     companion object {
@@ -67,7 +67,7 @@ data class CharacterListState(
             characters = emptyList(),
             error = false,
             hasAllCharacters = false,
-            hideLoading = false
+            loading = true
         )
     }
 }

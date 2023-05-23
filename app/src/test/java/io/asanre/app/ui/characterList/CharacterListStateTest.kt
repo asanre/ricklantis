@@ -22,8 +22,8 @@ class CharacterListStateTest {
     fun `when add new characters then return new state`() {
         val current = CharacterListState.INITIAL.addCharacters(dummyCharacterList)
 
-        assertTrue(current.showLoading)
         assertTrue(current.characters.isNotEmpty())
+        assertFalse(current.showLoading)
         assertFalse(current.showEmptyScreen)
         assertNotNull(current.count)
     }
