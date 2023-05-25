@@ -4,6 +4,7 @@ plugins {
     id 'org.jetbrains.kotlin.plugin.serialization'
     id "de.mannodermaus.android-junit5" version "1.8.2.1"
     id 'app.cash.molecule'
+    id "kotlin-parcelize"
 }
 
 def keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -84,7 +85,11 @@ dependencies {
 
     implementation "io.coil-kt:coil:$coil_version"
     implementation "io.coil-kt:coil-compose:$coil_version"
-    
+    // decompose-router
+    implementation("io.github.xxfast:decompose-router:0.2.1")
+    implementation("com.arkivanov.decompose:decompose:2.0.0-compose-experimental-alpha-02")
+    implementation("com.arkivanov.decompose:extensions-compose-jetbrains:2.0.0-compose-experimental-alpha-02")
+
     // Koin
     implementation "io.insert-koin:koin-core:$koin_version"
     implementation "io.insert-koin:koin-android:$koin_android_version"

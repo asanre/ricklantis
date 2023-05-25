@@ -33,7 +33,8 @@ import io.asanre.app.R
 import io.asanre.app.core.ui.components.LoadingIndicator
 import io.asanre.app.domain.entities.CharacterDetails
 import io.asanre.app.ui.characterDetail.CharacterDetailScreen.Event
-import org.koin.androidx.compose.koinViewModel
+import io.github.xxfast.decompose.router.rememberOnRoute
+import org.koin.compose.koinInject
 
 object CharacterDetailScreen {
     data class State(
@@ -52,11 +53,14 @@ object CharacterDetailScreen {
 fun CharacterDetailScreen(
     characterId: Int,
     modifier: Modifier = Modifier,
-    viewModel: CharacterDetailViewmodel = koinViewModel(),
+    viewModel: CharacterDetailViewmodel = koinInject(),
     onError: () -> Unit = { },
     onCloseClick: () -> Unit,
 ) {
-    val state by viewModel.state.collectAsState()
+
+    val instance =
+        rememberOnRoute(CharacterDetailViewmodel::class, characterId) { viewModel }
+    val state by instance.state.collectAsState()
 
     LaunchedEffect(characterId) {
         state.onEvent(Event.GetDetail(characterId))
