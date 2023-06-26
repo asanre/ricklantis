@@ -16,16 +16,19 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -33,12 +36,11 @@ import io.asanre.app.R
 import io.asanre.app.core.ui.components.LoadingIndicator
 import io.asanre.app.domain.entities.CharacterDetails
 import io.asanre.app.ui.characterDetail.CharacterDetailScreen.Event
-import io.github.xxfast.decompose.router.rememberOnRoute
 import org.koin.compose.koinInject
 
 object CharacterDetailScreen {
     data class State(
-        val value: CharacterDetails? = null,
+        val character: CharacterDetails? = null,
         val error: Boolean = false,
         val onEvent: (Event) -> Unit
     )
@@ -58,27 +60,24 @@ fun CharacterDetailScreen(
     onCloseClick: () -> Unit,
 ) {
 
-    val instance =
-        rememberOnRoute(CharacterDetailViewmodel::class, characterId) { viewModel }
-    val state by instance.state.collectAsState()
-
+    val state by viewModel.state.collectAsState()
     LaunchedEffect(characterId) {
         state.onEvent(Event.GetDetail(characterId))
     }
 
-    if (state.error) {
+    val showError by remember { derivedStateOf { state.error } }
+    if (showError) {
         onError()
         state.onEvent(Event.ErrorShown)
     }
 
-    val details = state.value
-    Crossfade(targetState = details) { detail ->
+    Crossfade(targetState = state.character) { detail ->
         if (detail == null) {
             LoadingIndicator(modifier.fillMaxSize())
         } else {
             DetailContent(
                 modifier = modifier,
-                detail = detail,
+                character = detail,
                 onCloseClick = onCloseClick,
             )
         }
@@ -88,7 +87,7 @@ fun CharacterDetailScreen(
 @Composable
 private fun DetailContent(
     modifier: Modifier,
-    detail: CharacterDetails,
+    character: CharacterDetails,
     onCloseClick: () -> Unit,
 ) {
     Column(
@@ -97,48 +96,71 @@ private fun DetailContent(
             .verticalScroll(rememberScrollState())
     ) {
         Box {
-            AsyncImage(
-                detail.imageUrl,
-                contentDescription = null,
-                alignment = Alignment.TopStart,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(0.25f)
-                    .clip(RoundedCornerShape(bottomStart = 8.dp, bottomEnd = 8.dp)),
-                placeholder = painterResource(id = R.drawable.place_holder),
-                error = painterResource(id = R.drawable.error_place_holder)
+            Image(character.imageUrl)
+            BackIcon(
+                modifier = Modifier.align(Alignment.TopStart),
+                onCloseClick = onCloseClick
             )
-            IconButton(
-                modifier = Modifier
-                    .align(Alignment.TopEnd),
-                onClick = onCloseClick
-            ) {
-                Icon(imageVector = Icons.Default.Close, contentDescription = "close")
-            }
         }
 
-        Column(Modifier.padding(12.dp)) {
-            Text(detail.name, style = MaterialTheme.typography.h3)
-            Text(
-                text = "${detail.status} - ${detail.species}",
-                style = MaterialTheme.typography.caption
-            )
-            Spacer(modifier = Modifier.padding(top = 24.dp))
+        Details(character)
+    }
+}
 
-            detail.origin?.let {
-                DetailSection("Original From:", it.value)
-            }
+@Composable
+private fun Details(detail: CharacterDetails) {
+    Column(Modifier.padding(12.dp)) {
+        Text(detail.name, style = MaterialTheme.typography.h3)
+        Text(
+            text = "${detail.status} - ${detail.species}",
+            style = MaterialTheme.typography.caption
+        )
+        Spacer(modifier = Modifier.padding(top = 24.dp))
 
-            detail.lastLocation?.let {
-                DetailSection("Last known location:", it.value)
-            }
+        detail.origin?.let {
+            DetailSection(stringResource(R.string.detail_original_from), it.value)
+        }
 
-            detail.firstEpisode?.let {
-                DetailSection("First seen in:", it.name)
-            }
+        detail.lastLocation?.let {
+            DetailSection(stringResource(R.string.detail_last_known_location), it.value)
+        }
+
+        detail.firstEpisode?.let {
+            DetailSection(stringResource(R.string.detail_first_seen_in), it.name)
         }
     }
+}
+
+@Composable
+private fun BackIcon(
+    modifier: Modifier,
+    onCloseClick: () -> Unit
+) {
+    IconButton(
+        modifier = modifier,
+        onClick = onCloseClick
+    ) {
+        Icon(
+            imageVector = Icons.Default.ArrowBack,
+            contentDescription = stringResource(R.string.detail_close)
+        )
+    }
+}
+
+@Composable
+private fun Image(imageUrl: String) {
+    AsyncImage(
+        imageUrl,
+        contentDescription = null,
+        alignment = Alignment.TopStart,
+        contentScale = ContentScale.Crop,
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.25f)
+            .clip(RoundedCornerShape(bottomStart = 8.dp, bottomEnd = 8.dp)),
+        placeholder = painterResource(id = R.drawable.place_holder),
+        error = painterResource(id = R.drawable.error_place_holder)
+    )
 }
 
 @Composable

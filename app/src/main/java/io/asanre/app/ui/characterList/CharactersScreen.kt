@@ -133,7 +133,7 @@ private fun EmptyView(
 ) {
     Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         OutlinedButton(onClick = onClick) {
-            Text(text = "Retry")
+            Text(text = stringResource(R.string.retry_btn))
         }
     }
 }

@@ -2,4 +2,9 @@
     <string name="app_name">Ricklantis</string>
     <string name="generic_error">Upsss there is an error</string>
     <string name="last_location_title">Last known location:</string>
+    <string name="retry_btn">Retry</string>
+    <string name="detail_original_from">Original From:</string>
+    <string name="detail_last_known_location">Last known location:</string>
+    <string name="detail_first_seen_in">First seen in:</string>
+    <string name="detail_close">close</string>
 </resources>
