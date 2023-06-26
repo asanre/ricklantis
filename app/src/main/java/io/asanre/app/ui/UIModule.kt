@@ -10,6 +10,6 @@ import org.koin.dsl.module
 val uiModule = module {
     factory { AndroidUiDispatcher.Main }
     single { RecompositionClock.ContextClock }
-    factory { CharacterDetailViewmodel(get()) }
+    viewModel { CharacterDetailViewmodel(get()) }
     viewModel { CharacterListViewmodel(get(), get(), get()) }
 }
