@@ -1,11 +1,8 @@
 package io.asanre.app.ui.characterDetail
 
 import androidx.compose.runtime.Composable
-import app.cash.molecule.RecompositionClock
-import app.cash.molecule.moleculeFlow
-import app.cash.turbine.ReceiveTurbine
-import app.cash.turbine.test
 import io.asanre.app.domain.usecase.GetCharacterDetailsUseCase
+import io.asanre.app.extensions.test
 import io.asanre.app.fixtures.dummyCharacterDetails
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -16,7 +13,6 @@ import org.junit.jupiter.api.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
-import kotlin.time.Duration
 
 internal class CharacterDetailPresenterTest {
     private val usecase: GetCharacterDetailsUseCase = mockk(relaxed = true)
@@ -28,7 +24,7 @@ internal class CharacterDetailPresenterTest {
     fun `when subscribe should return initial state`() = runTest {
         presenter.test {
             val initial = awaitItem()
-            assertNull(initial.value)
+            assertNull(initial.character)
             assertFalse(initial.error)
         }
     }
@@ -49,7 +45,7 @@ internal class CharacterDetailPresenterTest {
         presenter.test {
             awaitItem().onEvent(CharacterDetailScreen.Event.GetDetail(1))
             val actual = awaitItem()
-            assertEquals(dummyCharacterDetails, actual.value)
+            assertEquals(dummyCharacterDetails, actual.character)
             assertFalse(actual.error)
         }
     }
@@ -60,14 +56,8 @@ internal class CharacterDetailPresenterTest {
         presenter.test {
             awaitItem().onEvent(CharacterDetailScreen.Event.GetDetail(1))
             val actual = awaitItem()
-            assertNull(actual.value)
+            assertNull(actual.character)
             assertTrue(actual.error)
         }
     }
 }
-
-suspend fun <T> (@Composable () -> T).test(
-    timeout: Duration? = null,
-    name: String? = null,
-    validate: suspend ReceiveTurbine<T>.() -> Unit
-) = moleculeFlow(RecompositionClock.Immediate, this).test(timeout, name, validate)
