@@ -1,4 +1,4 @@
-package io.asanre.app.core.domain
+package io.asanre.app.core.ui.extensions
 
 import android.app.Activity
 import android.content.Context

@@ -1,4 +1,4 @@
-package io.asanre.app.core.domain
+package io.asanre.app.core.domain.extensions
 
 import kotlin.coroutines.cancellation.CancellationException
 

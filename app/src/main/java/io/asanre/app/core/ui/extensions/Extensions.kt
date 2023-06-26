@@ -1,4 +1,4 @@
-package io.asanre.app.core.ui
+package io.asanre.app.core.ui.extensions
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
