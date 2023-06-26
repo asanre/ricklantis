@@ -19,6 +19,10 @@ buildscript {
         koin_android_compose_version = "3.4.4"
 
         molecule_version = "0.9.0"
+        turbine_version = "0.13.0"
+        decompose_version = "2.0.0-compose-experimental-alpha-02"
+        decompose_router_version = "0.2.1"
+        decompose_extensions_version = "2.0.0-compose-experimental-alpha-02"
     }
 
     dependencies {

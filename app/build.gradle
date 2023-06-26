@@ -86,9 +86,9 @@ dependencies {
     implementation "io.coil-kt:coil:$coil_version"
     implementation "io.coil-kt:coil-compose:$coil_version"
     // decompose-router
-    implementation("io.github.xxfast:decompose-router:0.2.1")
-    implementation("com.arkivanov.decompose:decompose:2.0.0-compose-experimental-alpha-02")
-    implementation("com.arkivanov.decompose:extensions-compose-jetbrains:2.0.0-compose-experimental-alpha-02")
+    implementation("io.github.xxfast:decompose-router:$decompose_router_version")
+    implementation("com.arkivanov.decompose:decompose:$decompose_version")
+    implementation("com.arkivanov.decompose:extensions-compose-jetbrains:$decompose_extensions_version")
 
     // Koin
     implementation "io.insert-koin:koin-core:$koin_version"
@@ -113,7 +113,7 @@ dependencies {
     testImplementation "io.insert-koin:koin-test-junit4:$koin_version"
     testImplementation "io.insert-koin:koin-test-junit5:$koin_version"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_test_version"
-    testImplementation 'app.cash.turbine:turbine:0.13.0'
+    testImplementation "app.cash.turbine:turbine:$turbine_version"
 
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_ui_version"
