@@ -4,6 +4,7 @@ import io.asanre.app.data.model.CharacterLocation
 import io.asanre.app.data.model.CharacterResult
 import io.asanre.app.data.model.CharactersResponse
 import io.asanre.app.data.model.RequestInfo
+import io.asanre.app.domain.entities.CharacterDetails
 import io.asanre.app.domain.entities.Episode
 import io.asanre.app.domain.entities.LocationExtended
 import io.asanre.app.domain.entities.Status
@@ -36,3 +37,10 @@ val dummyCharacterList = dummyCharactersResponse.toEntity()
 val dummyOrigin = LocationExtended(2, "Earth", "test")
 val dummyLocation = LocationExtended(1, "Moon", "test")
 val dummyEpisode = Episode(1, "test1", "", "")
+
+val dummyCharacterDetails = CharacterDetails(
+    dummyCharacter,
+    dummyEpisode,
+    dummyOrigin,
+    dummyLocation
+)

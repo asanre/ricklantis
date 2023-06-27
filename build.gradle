@@ -1,11 +1,11 @@
 buildscript {
     ext {
-        compose_ui_version = '1.3.2'
-        material_version = "1.3.1"
-        lifecycle_runtime_version = "2.5.1"
-        activity_compose_version = "1.6.1"
-        core_ktx_version = "1.9.0"
-        coil_version = "2.2.2"
+        compose_ui_version = '1.4.3'
+        material_version = "1.4.3"
+        lifecycle_runtime_version = "2.6.1"
+        activity_compose_version = "1.7.1"
+        core_ktx_version = "1.10.1"
+        coil_version = "2.3.0"
 
         ktor_version = "2.2.4"
         logging_interceptor_version = "4.10.0"
@@ -14,15 +14,24 @@ buildscript {
         junit5_version = "5.8.2"
         coroutines_test_version = "1.6.4"
 
-        koin_version = "3.2.2"
-        koin_android_version = "3.3.0"
-        koin_android_compose_version = "3.3.0"
+        koin_version = "3.4.0"
+        koin_android_version = "3.4.0"
+        koin_android_compose_version = "3.4.4"
 
+        molecule_version = "0.9.0"
+        turbine_version = "0.13.0"
+        decompose_version = "2.0.0-compose-experimental-alpha-02"
+        decompose_router_version = "0.2.1"
+        decompose_extensions_version = "2.0.0-compose-experimental-alpha-02"
+    }
+
+    dependencies {
+        classpath "app.cash.molecule:molecule-gradle-plugin:$molecule_version"
     }
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
     id 'com.android.application' version '7.3.1' apply false
     id 'com.android.library' version '7.3.1' apply false
-    id 'org.jetbrains.kotlin.android' version '1.7.0' apply false
-    id 'org.jetbrains.kotlin.plugin.serialization' version '1.7.0' apply false
+    id 'org.jetbrains.kotlin.android' version '1.8.20' apply false
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.8.20' apply false
 }
